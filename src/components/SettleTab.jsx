@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useGame } from "../hooks/GameContext";
-import { computeNets, settle, netLoanRepayments } from "../utils/settle";
+import { computeNets, settle } from "../utils/settle";
 
 export default function SettleTab() {
   const { game, setCashOut, clearCashOut } = useGame();
-  const { players, buyIns, cashOuts, loans } = game;
+  const { players, buyIns, cashOuts } = game;
 
   if (players.length < 2) {
     return (
@@ -14,14 +14,12 @@ export default function SettleTab() {
     );
   }
 
-  const nameOf = (id) => players.find((p) => p.id === id)?.name ?? "?";
   const nets = computeNets(players, buyIns, cashOuts);
   const allEntered = nets.every((n) => n.cashOut !== null);
   const totalBuyIn = nets.reduce((sum, n) => sum + n.buyIn, 0);
   const totalCashOut = nets.reduce((sum, n) => sum + (n.cashOut ?? 0), 0);
   const mismatch = allEntered && Math.abs(totalBuyIn - totalCashOut) > 0.01;
-  const tableTransactions = allEntered ? settle(nets) : [];
-  const loanRepayments = netLoanRepayments(loans);
+  const transactions = allEntered ? settle(nets) : [];
 
   return (
     <div className="tab-content">
@@ -47,32 +45,16 @@ export default function SettleTab() {
         </p>
       )}
 
-      {loanRepayments.length > 0 && (
-        <>
-          <h3 className="section-title">Loan repayments</h3>
-          <ul className="settlement-list">
-            {loanRepayments.map((t, idx) => (
-              <li key={idx} className="settlement-row">
-                <span className="settlement-from">{nameOf(t.fromId)}</span>
-                <span className="settlement-arrow">pays</span>
-                <span className="settlement-to">{nameOf(t.toId)}</span>
-                <span className="settlement-amount">${t.amount.toFixed(2)}</span>
-              </li>
-            ))}
-          </ul>
-        </>
-      )}
-
-      <h3 className="section-title">Table settlement</h3>
+      <h3 className="section-title">Settlement</h3>
       {!allEntered && (
         <p className="empty-hint">Enter a cash-out for every player to see who pays whom.</p>
       )}
-      {allEntered && tableTransactions.length === 0 && (
+      {allEntered && transactions.length === 0 && (
         <p className="empty-hint">Everyone's even — no payments needed.</p>
       )}
-      {allEntered && tableTransactions.length > 0 && (
+      {allEntered && transactions.length > 0 && (
         <ul className="settlement-list">
-          {tableTransactions.map((t, idx) => (
+          {transactions.map((t, idx) => (
             <li key={idx} className="settlement-row">
               <span className="settlement-from">{t.fromName}</span>
               <span className="settlement-arrow">pays</span>
