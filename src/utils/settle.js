@@ -31,6 +31,30 @@ export function computeNets(players, buyIns, cashOuts) {
   });
 }
 
+export function netLoanRepayments(loans) {
+  const pairNet = new Map();
+
+  for (const l of loans) {
+    const [a, b] = [l.toId, l.fromId].sort();
+    const sign = l.toId === a ? 1 : -1;
+    const key = `${a}|${b}`;
+    pairNet.set(key, (pairNet.get(key) ?? 0) + sign * l.amount);
+  }
+
+  const repayments = [];
+  for (const [key, net] of pairNet) {
+    if (Math.abs(net) < EPSILON) continue;
+    const [a, b] = key.split("|");
+    repayments.push({
+      fromId: net > 0 ? a : b,
+      toId: net > 0 ? b : a,
+      amount: Math.round(Math.abs(net) * 100) / 100,
+    });
+  }
+
+  return repayments;
+}
+
 export function settle(nets) {
   const creditors = [];
   const debtors = [];
