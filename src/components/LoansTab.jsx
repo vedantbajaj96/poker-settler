@@ -31,10 +31,9 @@ export default function LoansTab() {
   return (
     <div className="tab-content">
       <p className="hint">
-        When someone lends chips because another player is out, log it here as a running
-        reference. It's not used in the final settlement — that's based only on each
-        player's actual final chip count, which already reflects every loan whether or
-        not you kept track of it here.
+        When someone lends chips because another player is out, log it here. It'll show
+        up as its own payment on the Settle tab, on top of the regular buy-in settlement
+        — so log every loan for the final numbers to come out right.
       </p>
 
       <form className="loan-form" onSubmit={handleAdd}>
