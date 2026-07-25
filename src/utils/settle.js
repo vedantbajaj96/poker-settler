@@ -31,28 +31,32 @@ export function computeNets(players, buyIns, cashOuts) {
   });
 }
 
-export function netLoanRepayments(loans) {
+export function netTransactions(transactions) {
   const pairNet = new Map();
 
-  for (const l of loans) {
-    const [a, b] = [l.toId, l.fromId].sort();
-    const sign = l.toId === a ? 1 : -1;
+  for (const t of transactions) {
+    const [a, b] = [t.fromId, t.toId].sort();
+    const sign = t.fromId === a ? 1 : -1;
     const key = `${a}|${b}`;
-    pairNet.set(key, (pairNet.get(key) ?? 0) + sign * l.amount);
+    pairNet.set(key, (pairNet.get(key) ?? 0) + sign * t.amount);
   }
 
-  const repayments = [];
+  const result = [];
   for (const [key, net] of pairNet) {
     if (Math.abs(net) < EPSILON) continue;
     const [a, b] = key.split("|");
-    repayments.push({
+    result.push({
       fromId: net > 0 ? a : b,
       toId: net > 0 ? b : a,
       amount: Math.round(Math.abs(net) * 100) / 100,
     });
   }
 
-  return repayments;
+  return result;
+}
+
+export function netLoanRepayments(loans) {
+  return netTransactions(loans.map((l) => ({ fromId: l.toId, toId: l.fromId, amount: l.amount })));
 }
 
 export function settle(nets) {
