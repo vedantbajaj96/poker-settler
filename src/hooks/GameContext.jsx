@@ -7,6 +7,8 @@ const emptyGame = {
   buyIns: [],
   loans: [],
   cashOuts: {},
+  phase: "setup",
+  defaultBuyIn: null,
 };
 
 const GameContext = createContext(null);
@@ -16,13 +18,28 @@ export function GameProvider({ children }) {
 
   const actions = useMemo(
     () => ({
+      setPhase(phase) {
+        setGame((g) => ({ ...g, phase }));
+      },
+
+      setDefaultBuyIn(amount) {
+        setGame((g) => ({ ...g, defaultBuyIn: amount > 0 ? amount : null }));
+      },
+
       addPlayer(name) {
         const trimmed = name.trim();
         if (!trimmed) return;
-        setGame((g) => ({
-          ...g,
-          players: [...g.players, { id: makeId(), name: trimmed }],
-        }));
+        const id = makeId();
+        setGame((g) => {
+          const result = { ...g, players: [...g.players, { id, name: trimmed }] };
+          if (g.defaultBuyIn > 0) {
+            result.buyIns = [
+              ...g.buyIns,
+              { id: makeId(), playerId: id, amount: g.defaultBuyIn, ts: Date.now() },
+            ];
+          }
+          return result;
+        });
       },
 
       removePlayer(playerId) {

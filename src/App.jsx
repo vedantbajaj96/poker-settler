@@ -1,17 +1,17 @@
-import { useState } from "react";
 import { GameProvider, useGame } from "./hooks/GameContext";
-import PlayersTab from "./components/PlayersTab";
-import LoansTab from "./components/LoansTab";
-import SettleTab from "./components/SettleTab";
-import TabNav from "./components/TabNav";
+import SetupPhase from "./components/SetupPhase";
+import PlayPhase from "./components/PlayPhase";
+import SettlePhase from "./components/SettlePhase";
 import "./App.css";
 
+const PHASES = ["setup", "playing", "settling"];
+
 function AppShell() {
-  const [tab, setTab] = useState("players");
-  const { newGame } = useGame();
+  const { game, newGame } = useGame();
+  const { phase } = game;
 
   function handleNewGame() {
-    if (window.confirm("Start a new game? This clears all players, buy-ins, loans, and cash-outs.")) {
+    if (window.confirm("Start a new game? This clears everything.")) {
       newGame();
     }
   }
@@ -19,19 +19,33 @@ function AppShell() {
   return (
     <div className="app">
       <header className="app-header">
-        <h1>Settle Up</h1>
-        <button type="button" className="btn-link" onClick={handleNewGame}>
-          New game
-        </button>
+        <div className="header-brand">
+          <span className="header-suit">♠</span>
+          <span className="header-title">Settle Up</span>
+        </div>
+        <div className="header-right">
+          <div className="phase-steps" aria-hidden="true">
+            {PHASES.map((p, i) => {
+              const currentIdx = PHASES.indexOf(phase);
+              return (
+                <div
+                  key={p}
+                  className={`phase-step ${phase === p ? "active" : ""} ${currentIdx > i ? "done" : ""}`}
+                />
+              );
+            })}
+          </div>
+          <button type="button" className="btn-new-game" onClick={handleNewGame}>
+            New game
+          </button>
+        </div>
       </header>
 
       <main className="app-main">
-        {tab === "players" && <PlayersTab />}
-        {tab === "loans" && <LoansTab />}
-        {tab === "settle" && <SettleTab />}
+        {phase === "setup" && <SetupPhase />}
+        {phase === "playing" && <PlayPhase />}
+        {phase === "settling" && <SettlePhase />}
       </main>
-
-      <TabNav active={tab} onChange={setTab} />
     </div>
   );
 }

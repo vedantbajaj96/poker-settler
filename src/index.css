@@ -1,43 +1,45 @@
-:root {
-  --bg: #f4f5f7;
-  --surface: #ffffff;
-  --text: #1a1c23;
-  --text-muted: #6b7280;
-  --border: #e5e7eb;
-  --accent: #2f6f4f;
-  --accent-contrast: #ffffff;
-  --danger: #c0392b;
-  --positive: #1b8a4b;
-  --negative: #c0392b;
-
-  color-scheme: light dark;
-  font: 16px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  color: var(--text);
-  background: var(--bg);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #101114;
-    --surface: #1a1c22;
-    --text: #f3f4f6;
-    --text-muted: #9ca3af;
-    --border: #2c2f37;
-    --accent: #4caf7d;
-    --accent-contrast: #08160f;
-    --positive: #4caf7d;
-    --negative: #e57373;
-  }
-}
-
-* {
+*, *::before, *::after {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #0a0c0f;
+  --surface: #131720;
+  --surface-2: #1c2130;
+  --surface-3: #252c3d;
+  --accent: #22a552;
+  --accent-dim: rgba(34, 165, 82, 0.14);
+  --accent-border: rgba(34, 165, 82, 0.35);
+  --gold: #e8a628;
+  --gold-dim: rgba(232, 166, 40, 0.13);
+  --red: #e05252;
+  --red-dim: rgba(224, 82, 82, 0.12);
+  --text: #edf2f7;
+  --text-muted: #4e5a6e;
+  --text-dim: #8892a4;
+  --border: rgba(255, 255, 255, 0.07);
+  --font-display: 'Syne', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+  --font-body: 'Karla', sans-serif;
+  --radius: 14px;
+  --radius-sm: 10px;
+  --radius-lg: 20px;
+}
+
+html, body, #root {
+  height: 100%;
 }
 
 body {
-  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 #root {
@@ -47,10 +49,23 @@ body {
 }
 
 button {
-  font: inherit;
+  font-family: var(--font-body);
+  cursor: pointer;
+  border: none;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
-input,
-select {
-  font: inherit;
+input, select {
+  font-family: var(--font-body);
+  -webkit-tap-highlight-color: transparent;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
 }

@@ -99,3 +99,30 @@ export function settle(nets) {
 
   return transactions;
 }
+
+// Each debtor pays each creditor their proportional share — more payments
+// but every payment is a direct relationship between just two players.
+export function settleOneToOne(nets) {
+  const creditors = nets.filter((n) => n.net > EPSILON);
+  const debtors = nets.filter((n) => n.net < -EPSILON);
+  const totalCredit = creditors.reduce((sum, c) => sum + c.net, 0);
+  if (totalCredit < EPSILON) return [];
+
+  const transactions = [];
+  for (const debtor of debtors) {
+    for (const creditor of creditors) {
+      const share = creditor.net / totalCredit;
+      const amount = Math.round((-debtor.net) * share * 100) / 100;
+      if (amount > EPSILON) {
+        transactions.push({
+          fromId: debtor.playerId,
+          fromName: debtor.name,
+          toId: creditor.playerId,
+          toName: creditor.name,
+          amount,
+        });
+      }
+    }
+  }
+  return transactions;
+}
