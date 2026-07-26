@@ -1,4 +1,5 @@
 import { GameProvider, useGame } from "./hooks/GameContext";
+import { useTheme } from "./hooks/useTheme";
 import SetupPhase from "./components/SetupPhase";
 import PlayPhase from "./components/PlayPhase";
 import SettlePhase from "./components/SettlePhase";
@@ -8,6 +9,7 @@ const PHASES = ["setup", "playing", "settling"];
 
 function AppShell() {
   const { game, newGame } = useGame();
+  const [theme, toggleTheme] = useTheme();
   const { phase } = game;
 
   function handleNewGame() {
@@ -35,6 +37,9 @@ function AppShell() {
               );
             })}
           </div>
+          <button type="button" className="btn-theme" onClick={toggleTheme} aria-label="Toggle theme">
+            {theme === "dark" ? "☀" : "☽"}
+          </button>
           <button type="button" className="btn-new-game" onClick={handleNewGame}>
             New game
           </button>

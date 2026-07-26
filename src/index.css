@@ -20,12 +20,28 @@
   --text-muted: #4e5a6e;
   --text-dim: #8892a4;
   --border: rgba(255, 255, 255, 0.07);
-  --font-display: 'Syne', sans-serif;
+  --font-display: 'Outfit', sans-serif;
   --font-mono: 'IBM Plex Mono', monospace;
-  --font-body: 'Karla', sans-serif;
+  --font-body: 'Outfit', sans-serif;
   --radius: 14px;
   --radius-sm: 10px;
   --radius-lg: 20px;
+}
+
+/* Light theme overrides */
+:root[data-theme="light"] {
+  --bg: #f0f2f5;
+  --surface: #ffffff;
+  --surface-2: #e8ecf1;
+  --surface-3: #dde2ea;
+  --text: #1a1e2a;
+  --text-muted: #8892a4;
+  --text-dim: #6b7280;
+  --border: rgba(0, 0, 0, 0.09);
+  --accent-dim: rgba(22, 136, 62, 0.1);
+  --accent-border: rgba(22, 136, 62, 0.3);
+  --gold-dim: rgba(180, 120, 0, 0.1);
+  --red-dim: rgba(200, 50, 50, 0.1);
 }
 
 html, body, #root {

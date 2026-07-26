@@ -69,6 +69,20 @@
   background: rgba(34, 165, 82, 0.35);
 }
 
+.btn-theme {
+  background: none;
+  color: var(--text-muted);
+  font-size: 16px;
+  line-height: 1;
+  padding: 4px 6px;
+  border-radius: 6px;
+  transition: color 0.15s;
+}
+
+.btn-theme:hover {
+  color: var(--text);
+}
+
 .btn-new-game {
   font-size: 12px;
   color: var(--text-muted);
@@ -107,10 +121,10 @@
 
 .phase-title {
   font-family: var(--font-display);
-  font-size: 28px;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
 }
 
 .phase-sub {
@@ -177,6 +191,7 @@
   font-family: var(--font-mono);
   font-size: 18px;
   padding: 13px 14px 13px 4px;
+  min-height: 44px;
 }
 
 .money-field input::placeholder {
@@ -199,6 +214,7 @@
   letter-spacing: 0.01em;
   transition: opacity 0.15s, transform 0.1s;
   white-space: nowrap;
+  min-height: 44px;
 }
 
 .btn-primary:hover { opacity: 0.88; }
@@ -478,6 +494,37 @@
 }
 
 /* ─── Play Phase ─── */
+.play-mode-tabs {
+  display: flex;
+  gap: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 4px;
+}
+
+.play-mode-tab {
+  flex: 1;
+  padding: 9px 8px;
+  border-radius: 7px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: none;
+  transition: all 0.15s;
+}
+
+.play-mode-tab.active {
+  background: var(--surface-3);
+  color: var(--text);
+}
+
+.pill-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-left: 2px;
+}
+
 .transfer-card {
   display: flex;
   flex-direction: column;
@@ -502,13 +549,14 @@
   display: flex;
   align-items: center;
   gap: 7px;
-  padding: 7px 12px 7px 8px;
+  padding: 10px 14px 10px 9px;
   border-radius: 24px;
   background: var(--surface-2);
   border: 1px solid var(--border);
   font-size: 14px;
   color: var(--text-dim);
   transition: all 0.15s;
+  min-height: 44px;
 }
 
 .player-pill:hover {
@@ -612,6 +660,37 @@
 }
 
 /* ─── Settle Phase ─── */
+.pot-guide {
+  background: var(--gold-dim);
+  border: 1px solid rgba(232, 166, 40, 0.22);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pot-guide-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pot-guide-label {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.pot-guide-amount {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--gold);
+}
+
+.pot-guide-sub .pot-guide-label {
+  font-size: 12px;
+}
+
 .cashout-list {
   list-style: none;
   padding: 0;
