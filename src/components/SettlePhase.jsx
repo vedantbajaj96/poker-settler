@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useGame } from "../hooks/GameContext";
-import { computeNets, settle, settleOneToOne } from "../utils/settle";
+import { computeNets, settle, settleOneToOne, netTransactions } from "../utils/settle";
 
 const COLORS = [
   "#22a552", "#3b82f6", "#a855f7", "#ef4444",
@@ -167,7 +167,7 @@ async function shareResults(nets, transactions, totalPot) {
 
 export default function SettlePhase() {
   const { game, setCashOut, clearCashOut, setPhase } = useGame();
-  const { players, buyIns, cashOuts } = game;
+  const { players, buyIns, cashOuts, loans } = game;
   const [simplified, setSimplified] = useState(true);
   const [sharing, setSharing] = useState(false);
 
@@ -179,9 +179,11 @@ export default function SettlePhase() {
   const totalCashOut = nets.reduce((sum, n) => sum + (n.cashOut ?? 0), 0);
   const mismatch = allEntered && Math.abs(totalBuyInAmt - totalCashOut) > 0.01;
 
-  const transactions = allEntered
-    ? (simplified ? settle(nets) : settleOneToOne(nets))
-    : [];
+  // Chip transfers are treated as debts: receiver owes the giver that amount back,
+  // on top of what the chip counts say. Netted together so they can cancel out.
+  const loanRepayments = loans.map((l) => ({ fromId: l.toId, toId: l.fromId, amount: l.amount }));
+  const tableFlows = allEntered ? (simplified ? settle(nets) : settleOneToOne(nets)) : [];
+  const transactions = allEntered ? netTransactions([...loanRepayments, ...tableFlows]) : [];
 
   const enteredSoFar = nets.reduce((sum, n) => sum + (n.cashOut ?? 0), 0);
   const remaining = totalBuyInAmt - enteredSoFar;
@@ -219,6 +221,12 @@ export default function SettlePhase() {
           </div>
         )}
       </div>
+
+      {loans.length > 0 && (
+        <div className="transfer-debt-note">
+          Chip transfers are counted as debts — when entering cash-outs, don't include chips you received from another player.
+        </div>
+      )}
 
       <ul className="cashout-list">
         {nets.map((n, idx) => (
