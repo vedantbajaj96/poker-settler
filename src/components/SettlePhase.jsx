@@ -167,13 +167,13 @@ async function shareResults(nets, transactions, totalPot) {
 
 export default function SettlePhase() {
   const { game, setCashOut, clearCashOut, setPhase } = useGame();
-  const { players, buyIns, cashOuts } = game;
+  const { players, buyIns, cashOuts, loans } = game;
   const [simplified, setSimplified] = useState(true);
   const [sharing, setSharing] = useState(false);
 
   const playerIndex = (id) => players.findIndex((p) => p.id === id);
 
-  const nets = computeNets(players, buyIns, cashOuts);
+  const nets = computeNets(players, buyIns, cashOuts, loans);
   const allEntered = nets.every((n) => n.cashOut !== null);
   const totalBuyInAmt = nets.reduce((sum, n) => sum + n.buyIn, 0);
   const totalCashOut = nets.reduce((sum, n) => sum + (n.cashOut ?? 0), 0);

@@ -16,17 +16,18 @@ export function loanBalance(loans, playerId) {
   return lent - borrowed;
 }
 
-export function computeNets(players, buyIns, cashOuts) {
+export function computeNets(players, buyIns, cashOuts, loans = []) {
   return players.map((p) => {
     const buyIn = totalBuyIn(buyIns, p.id);
     const cashOut = cashOuts[p.id];
     const hasCashOut = typeof cashOut === "number";
+    const loanAdj = loanBalance(loans, p.id);
     return {
       playerId: p.id,
       name: p.name,
       buyIn,
       cashOut: hasCashOut ? cashOut : null,
-      net: hasCashOut ? cashOut - buyIn : null,
+      net: hasCashOut ? cashOut - buyIn + loanAdj : null,
     };
   });
 }
